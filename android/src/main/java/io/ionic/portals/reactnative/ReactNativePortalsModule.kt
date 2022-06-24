@@ -195,10 +195,15 @@ internal class PortalViewManager(private val context: ReactApplicationContext) :
         portalFragment = if (portalFragment == null) {
             PortalFragment(portal)
         } else {
-            fragmentActivity.supportFragmentManager
-                .beginTransaction()
-                .remove(portalFragment!!)
-                .commit()
+            portalFragment?.parentFragmentManager
+                ?.beginTransaction()
+                ?.remove(portalFragment!!)
+                ?.commit()
+
+//            fragmentActivity.supportFragmentManager
+//                .beginTransaction()
+//                .remove(portalFragment!!)
+//                .commit()
 
             PortalFragment(portal)
         }
