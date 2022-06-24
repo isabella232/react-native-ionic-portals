@@ -151,6 +151,7 @@ internal class PortalViewManager(private val context: ReactApplicationContext) :
     ViewGroupManager<FrameLayout>() {
     private val createId = 1
     private var portal: Portal? = null
+    private var portalFragment: PortalFragment? = null
 
     @ReactProp(name = "name")
     fun setPortal(viewGroup: ViewGroup, portalName: String) {
@@ -189,11 +190,22 @@ internal class PortalViewManager(private val context: ReactApplicationContext) :
         val parentView = root.findViewById<ViewGroup>(viewId)
         setupLayout(parentView)
 
-        val portalFragment = PortalFragment(portal)
         val fragmentActivity = context.currentActivity as? FragmentActivity ?: return
+
+        portalFragment = if (portalFragment == null) {
+            PortalFragment(portal)
+        } else {
+            fragmentActivity.supportFragmentManager
+                .beginTransaction()
+                .remove(portalFragment!!)
+                .commit()
+
+            PortalFragment(portal)
+        }
+
         fragmentActivity.supportFragmentManager
             .beginTransaction()
-            .replace(viewId, portalFragment, "$viewId")
+            .add(viewId, portalFragment!!, "$viewId")
             .commit()
     }
 
