@@ -166,7 +166,8 @@ internal class PortalViewManager(private val context: ReactApplicationContext) :
     override fun getName() = "AndroidPortalView"
 
     override fun createViewInstance(reactContext: ThemedReactContext): FrameLayout {
-        return FrameLayout(reactContext)
+        val name = portal?.name ?: return FrameLayout(reactContext)
+        return PortalView(reactContext, name)
     }
 
     override fun getCommandsMap(): MutableMap<String, Int>? {
@@ -186,32 +187,32 @@ internal class PortalViewManager(private val context: ReactApplicationContext) :
     }
 
     private fun createFragment(root: FrameLayout, viewId: Int) {
-        val portal = portal ?: return
-        val parentView = root.findViewById<ViewGroup>(viewId)
-        setupLayout(parentView)
-
-        val fragmentActivity = context.currentActivity as? FragmentActivity ?: return
-
-        portalFragment = if (portalFragment == null) {
-            PortalFragment(portal)
-        } else {
-            portalFragment?.parentFragmentManager
-                ?.beginTransaction()
-                ?.remove(portalFragment!!)
-                ?.commit()
+//        val portal = portal ?: return
+//        val parentView = root.findViewById<ViewGroup>(viewId)
+//        setupLayout(parentView)
+//
+//        val fragmentActivity = context.currentActivity as? FragmentActivity ?: return
+//
+//        portalFragment = if (portalFragment == null) {
+//            PortalFragment(portal)
+//        } else {
+//            portalFragment?.parentFragmentManager
+//                ?.beginTransaction()
+//                ?.remove(portalFragment!!)
+//                ?.commit()
 
 //            fragmentActivity.supportFragmentManager
 //                .beginTransaction()
 //                .remove(portalFragment!!)
 //                .commit()
 
-            PortalFragment(portal)
-        }
+//            PortalFragment(portal)
+//        }
 
-        fragmentActivity.supportFragmentManager
-            .beginTransaction()
-            .add(viewId, portalFragment!!, "$viewId")
-            .commit()
+//        fragmentActivity.supportFragmentManager
+//            .beginTransaction()
+//            .add(viewId, portalFragment!!, "$viewId")
+//            .commit()
     }
 
     private fun setupLayout(view: ViewGroup) {
